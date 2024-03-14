@@ -1,20 +1,16 @@
-import unittest
+# test_app_pytest.py
 from app import app
+import pytest
 
-class HelloWorldTestCase(unittest.TestCase):
 
-    def setUp(self):
-        # Set up the app to run in testing mode
-        app.testing = True
-        self.app = app.test_client()
+@pytest.fixture
+def client():
+    app.testing = True
+    with app.test_client() as client:
+        yield client
 
-    def test_hello_world(self):
-        # Send a GET request to the Flask application
-        response = self.app.get('/')
-        # Check if the response data matches "Hello, World!"
-        self.assertEqual(response.data.decode('utf-8'), 'Hello, World!')
-        # Check if the response status code is 200 (OK)
-        self.assertEqual(response.status_code, 200)
-
-if __name__ == '__main__':
-    unittest.main()
+def test_hello_world(client):
+    """Send a GET request to the Flask application and check the response."""
+    response = client.get('/')
+    assert response.data.decode('utf-8') == 'Hello, World!'
+    assert response.status_code == 200
