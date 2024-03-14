@@ -20,4 +20,4 @@ jobs:
     - name: Run tests
       run: |
         # Replace with your command to run tests, for example:
-        python -m unittest discover
+        pytest
